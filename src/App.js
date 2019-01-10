@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Designer from './components/Designer';
+
+import Designer from './designer';
 
 export default class App extends Component {
     state = {
