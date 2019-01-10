@@ -47,6 +47,7 @@ export default class Transformer extends Component {
         return <KonvaTransformer
             ref={node => this.transformer = node}
             rotationSnaps={[0, 45, 90, 135, 180, 225, 270, 315, 359]}
+            keepRatio
             {...props} />
     }
 }

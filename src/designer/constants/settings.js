@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS = {
         height: 100,
         fill: '#2460A7',
         stroke: '#21366E',
-        strokeWidth: 1,
+        strokeWidth: 0,
         rotation: 0
     },
     circle: {
@@ -17,7 +17,7 @@ export const DEFAULT_SETTINGS = {
         height: 100,
         fill: 'rgba(106, 174, 170, 1)',
         stroke: 'rgba(37, 148, 144, 1)',
-        strokeWidth: 1,
+        strokeWidth: 0,
         rotation: 0
     },
     curve: {

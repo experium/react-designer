@@ -48,10 +48,32 @@ export default WrappedComponent =>
             });
         }
 
+        showHelper = () => {
+            const { element } = this.props;
+
+            return Math.ceil(element.width * (element.scaleX || 1)) < 6 ||
+                Math.ceil(element.height * (element.scaleY || 1)) < 6;
+        }
+
+        getHelperWidth = () => {
+            const { element } = this.props;
+
+            return Math.ceil(element.width * (element.scaleX || 1)) < 5 ? Math.ceil(5 / (element.scaleX || 1)) : element.width;
+        }
+
+        getHelperHeight = () => {
+            const { element } = this.props;
+
+            return Math.ceil(element.height * (element.scaleY || 1)) < 5 ? Math.ceil(5 / (element.scaleY || 1)) : element.height;
+        }
+
         render() {
             return <WrappedComponent
                 {...this.props}
                 onDragMove={this.onDragMove}
-                onTransform={this.onTransform} />;
+                onTransform={this.onTransform}
+                showHelper={this.showHelper()}
+                helperWidth={this.getHelperWidth()}
+                helperHeight={this.getHelperHeight()} />;
         }
     }

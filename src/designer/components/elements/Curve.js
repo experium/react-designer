@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Shape } from 'react-konva';
 import { forEach, reduce, last, dropLast, is, unnest, any, propEq } from 'ramda';
 
@@ -53,15 +53,30 @@ class Curve extends Component {
     }
 
     render() {
-        const { element, onDragMove, onTransform } = this.props;
+        const {
+            element,
+            onDragMove,
+            onTransform
+        } = this.props;
 
-        return <Shape
-            {...element}
-            sceneFunc={this.sceneFunc}
-            onDragMove={onDragMove}
-            onTransform={onTransform}
-            draggable
-        />;
+        return <Fragment>
+            <Shape
+                {...element}
+                opacity={0}
+                strokeWidth={5}
+                name={`${element.name}-helper`}
+                sceneFunc={this.sceneFunc}
+                onDragMove={onDragMove}
+                draggable
+            />
+            <Shape
+                {...element}
+                sceneFunc={this.sceneFunc}
+                onDragMove={onDragMove}
+                onTransform={onTransform}
+                draggable
+            />
+        </Fragment>;
     }
 }
 

@@ -65,7 +65,7 @@ export default class Canvas extends Component {
             return;
         }
 
-        const name = e.target.name();
+        const name = (e.target.name() || '').replace('-helper', '');
         const element = find(propEq('name', name), elements);
 
         if (element && !anchorsEditable) {

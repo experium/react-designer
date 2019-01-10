@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Rect } from 'react-konva';
 
 import withElementHandlers from '../hocs/withElementHandlers';
@@ -13,15 +13,31 @@ class Rectangle extends Component {
         const {
             element,
             onDragMove,
-            onTransform
+            onTransform,
+            showHelper,
+            helperWidth,
+            helperHeight
         } = this.props;
 
-        return <Rect
-            {...element}
-            onDragMove={onDragMove}
-            onTransform={onTransform}
-            draggable
-        />;
+        return <Fragment>
+            { showHelper &&
+                <Rect
+                    {...element}
+                    opacity={0}
+                    name={`${element.name}-helper`}
+                    width={helperWidth}
+                    height={helperHeight}
+                    onDragMove={onDragMove}
+                    draggable
+                />
+            }
+            <Rect
+                {...element}
+                onDragMove={onDragMove}
+                onTransform={onTransform}
+                draggable
+            />
+        </Fragment>;
     }
 }
 
