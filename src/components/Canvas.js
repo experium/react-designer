@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Stage, Layer, Rect, Circle as KonvaCircle } from 'react-konva';
-import { find, propEq, filter, has, pathEq, update, equals } from 'ramda';
+import { Stage, Layer, Rect, Circle as KonvaCircle, Line } from 'react-konva';
+import { find, propEq, filter, has, pathEq, update, equals, head, unnest } from 'ramda';
 import WebFont from 'webfontloader';
 
 import Transformer from './Transformer';
@@ -105,15 +105,16 @@ export default class Canvas extends Component {
                 ...current,
                 x: index ? current.x : x,
                 y: index ? current.y : y,
-                anchors: update(index, { x, y }, current.anchors)
+                anchors: update(index, { ...current.anchors[index], x, y }, current.anchors)
             });
         }
     }
 
     renderAnchors = element => {
         const { onChangeCurrentAnchor, currentAnchor } = this.props;
+        const show = pathEq(['current', 'name'], element.name, this.props);
 
-        return element.anchors.map((anchor, index) =>
+        return show && element.anchors.map((anchor, index) =>
             <KonvaCircle
                 key={`anchor-${element.name}-${index}`}
                 className='anchor'
@@ -124,12 +125,24 @@ export default class Canvas extends Component {
                 strokeWidth={equals(currentAnchor, { name: element.name, index }) ? 2 : 1}
                 width={10}
                 height={10}
-                opacity={pathEq(['current', 'name'], element.name, this.props) ? 1 : 0}
                 onDragMove={e => this.onDragAnchor(e, index)}
                 onDragStart={() => onChangeCurrentAnchor(element.name, index)}
                 onClick={() => onChangeCurrentAnchor(element.name, index)}
                 draggable />
         );
+    }
+
+    renderAnchorBorder = element => {
+        const headAnchor = head(element.anchors);
+        const show = pathEq(['current', 'name'], element.name, this.props) && headAnchor;
+        const points = unnest(element.anchors.map(({ x, y }) => ([x, y])));
+
+        return show &&
+            <Line
+                stroke='rgb(0, 161, 255)'
+                strokeWidth={1}
+                key={`anchor-border-${element.name}`}
+                points={element.close ? [ ...points, headAnchor.x, headAnchor.y ] : points} />;
     }
 
     render() {
@@ -159,6 +172,7 @@ export default class Canvas extends Component {
                 <Transformer current={current} />
             </Layer>
             <Layer>
+                { elementsWithAnchors.map(this.renderAnchorBorder) }
                 { elementsWithAnchors.map(this.renderAnchors) }
             </Layer>
         </Stage>;

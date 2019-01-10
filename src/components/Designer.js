@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { find, propEq, pathOr, path, findIndex, update, remove, prop } from 'ramda';
+import { find, propEq, pathOr, path, findIndex, update, remove, prop, assoc, contains } from 'ramda';
 import uniqid from 'uniqid';
 
 import Toolbar from './Toolbar';
@@ -50,6 +50,76 @@ export default class Designer extends Component {
         anchorsEditable: false,
         currentAnchor: null
     };
+
+    componentDidMount() {
+        window.addEventListener('keydown', this.onKeyDown);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.onKeyDown);
+    }
+
+    onKeyDown = e => {
+        const { current, currentAnchor } = this.state;
+
+        if (contains(e.target.tagName, ['TEXTAREA', 'INPUT'])) {
+            return;
+        }
+
+        switch (e.keyCode) {
+            case 8:
+                if (currentAnchor) {
+                    this.onRemoveCurrentAnchor();
+                } else if (current) {
+                    this.onRemoveCurrent();
+                }
+                break;
+            case 37:
+                this.moveCurrentToX(e, true);
+                break;
+            case 38:
+                this.moveCurrentToY(e, true);
+                break;
+            case 39:
+                this.moveCurrentToX(e);
+                break;
+            case 40:
+                this.moveCurrentToY(e);
+                break;
+            default:
+        }
+    }
+
+    moveCurrentToX = (e, left) => {
+        e.preventDefault();
+        const current = this.getCurrentElement();
+        const x = current.x + (left ? -1 : 1);
+
+
+        this.onChangeCurrentElement({
+            ...current,
+            x,
+            ...(current.anchors ?
+                { anchors: current.anchors.map(a => assoc('x', a.x + (left ? -1 : 1), a)) } :
+                {}
+            )
+        });
+    }
+
+    moveCurrentToY = (e, top) => {
+        e.preventDefault();
+        const current = this.getCurrentElement();
+        const y = current.y + (top ? -1 : 1);
+
+        this.onChangeCurrentElement({
+            ...current,
+            y,
+            ...(current.anchors ?
+                { anchors: current.anchors.map(a => assoc('y', a.y + (top ? -1 : 1), a)) } :
+                {}
+            )
+        });
+    }
 
     onSelectType = selectedType => this.setState({
         selectedType,
@@ -191,8 +261,8 @@ export default class Designer extends Component {
         const { currentAnchor } = this.state;
         const current = this.getCurrentElement();
 
-        this.onChangeCurrentProp('anchors', remove(currentAnchor.index, 1, current.anchors));
         this.setState({ currentAnchor: null });
+        this.onChangeCurrentProp('anchors', remove(currentAnchor.index, 1, current.anchors));
     }
 
     render() {

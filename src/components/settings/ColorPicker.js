@@ -6,6 +6,10 @@ import { SketchPicker } from 'react-color'
 
 import CurrentContext from '../context/CurrentContext';
 
+const MainContainer = styled.div`
+    display: flex;
+`;
+
 const Container = styled.div`
     position: relative;
 `;
@@ -21,8 +25,9 @@ const Swatch = styled.div`
 
 const PickerWrapper = styled.div`
     position: absolute;
-    right: 16px;
+    right: 0;
     top: 20px;
+    z-index: 10;
 `;
 
 export default class ColorPicker extends Component {
@@ -53,19 +58,21 @@ export default class ColorPicker extends Component {
         const { opened } = this.state;
         const item = current || settings;
 
-        return <Container>
-            <Swatch
-                color={item[prop]} onClick={this.toggle} />
-            { opened &&
-                <PickerWrapper>
-                    <ClickOutside onClickOutside={this.close}>
-                        <SketchPicker
-                            color={item[prop]}
-                            onChange={color => this.onChange(color, current ? onChangeProp : onChangeSettingsProp)} />
-                    </ClickOutside>
-                </PickerWrapper>
-            }
-        </Container>;
+        return <MainContainer>
+            <Container>
+                <Swatch
+                    color={item[prop]} onClick={this.toggle} />
+                { opened &&
+                    <PickerWrapper>
+                        <ClickOutside onClickOutside={this.close}>
+                            <SketchPicker
+                                color={item[prop]}
+                                onChange={color => this.onChange(color, current ? onChangeProp : onChangeSettingsProp)} />
+                        </ClickOutside>
+                    </PickerWrapper>
+                }
+            </Container>
+        </MainContainer>;
     }
 
     render() {

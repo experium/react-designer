@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Shape } from 'react-konva';
-import { forEach, reduce, last, dropLast, is } from 'ramda';
+import { forEach, reduce, last, dropLast, is, unnest, any, propEq } from 'ramda';
 
 import elementProps from './elementProps';
 import withElementHandlers from '../hocs/withElementHandlers';
@@ -15,27 +15,38 @@ class Curve extends Component {
 
         context.beginPath();
 
-        // console.log(anchors)
+        const grouped = reduce((res, cur) => {
+            const lastIsArray = is(Array, last(res));
 
-        // const grouped = reduce((res, cur) => {
-        //     if (cur.bezier || (!cur.bezier && is(Array, last(res)))) {
-        //         let lastAnchor = is(Array, last(res)) ? last(res) : [];
-        //         lastAnchor.push(cur);
-        //         return [...(is(Array, last(res)) ? dropLast(res) : res), lastAnchor];
-        //     } else {
-        //         return [...res, cur];
-        //     }
-        // }, [], anchors);
-
-        // console.log(grouped)
+            if (cur.bezier || (!cur.bezier && lastIsArray && !any(propEq('bezier', false), last(res)))) {
+                const isCurve = lastIsArray && last(last(res)).bezier;
+                let lastAnchor = isCurve ? last(res) : [];
+                lastAnchor.push(cur);
+                return [...(isCurve ? dropLast(1, res) : res), lastAnchor];
+            } else {
+                return [...res, cur];
+            }
+        }, [], anchors);
 
         forEach((anchor, i) => {
-            if (i === 0) {
-                context.moveTo(anchor.x - x, anchor.y - y);
+            if (is(Array, anchor)) {
+                const points = unnest(anchor.map(({ x: aX, y: aY }) => ([aX - x, aY - y])));
+
+                if (points.length === 2) {
+                    context.lineTo(...points);
+                } if (points.length === 4) {
+                    context.quadraticCurveTo(...points);
+                } else {
+                    context.bezierCurveTo(...points);
+                }
             } else {
-                context.lineTo(anchor.x - x, anchor.y - y);
+                if (i === 0) {
+                    context.moveTo(anchor.x - x, anchor.y - y);
+                } else {
+                    context.lineTo(anchor.x - x, anchor.y - y);
+                }
             }
-        }, anchors);
+        }, grouped);
 
         close && context.closePath();
         context.fillStrokeShape(shape);

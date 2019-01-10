@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBezierCurve, faVectorSquare } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { assocPath, remove } from 'ramda';
+import { assocPath, path } from 'ramda';
 
 import { Panel, PanelButton } from './StyledSettingsComponents';
 import Row from './Row';
@@ -20,19 +20,29 @@ const TypeIcon = styled(FontAwesomeIcon)`
 `;
 
 export default class AnchorPanel extends Component {
-    onChangeAnchorType = (onChangeProp, anchors, index, bezier) => {
+    onChangeAnchorType = (onChangeProp, anchors, index, bezier = false) => {
         onChangeProp('anchors', assocPath([index, 'bezier'], bezier, anchors));
+    }
+
+    disableBezier = (anchors, index) => {
+        return index === 0 ||
+            index === anchors.length - 1 ||
+            (path([index - 1, 'bezier'], anchors) && path([index + 1, 'bezier'], anchors)) ||
+            (path([index - 1, 'bezier'], anchors) && path([index - 2, 'bezier'], anchors)) ||
+            (path([index + 1, 'bezier'], anchors) && path([index + 2, 'bezier'], anchors));
     }
 
     renderPanel = (currentAnchor, onRemoveCurrentAnchor, current, onChangeProp) => {
         const anchor = current.anchors[currentAnchor.index];
+        const disableBezier = this.disableBezier(current.anchors, currentAnchor.index);
 
         return <Panel>
             <Row label='Тип'>
-                <TypeIcon
+                { !disableBezier && <TypeIcon
                     icon={faBezierCurve}
                     color={anchor.bezier ? 'black' : 'rgb(181, 181, 181)'}
                     onClick={() => this.onChangeAnchorType(onChangeProp, current.anchors, currentAnchor.index, true)} />
+                }
                 <TypeIcon
                     icon={faVectorSquare}
                     color={!anchor.bezier ? 'black' : 'rgb(181, 181, 181)'}
