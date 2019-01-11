@@ -11,7 +11,8 @@ jobs:
       node_js: stable
       before_deploy:
       - yarn install
-      - yarn build:lib
+      - yarn build
+      - cd designer
       deploy:
         skip_cleanup: true
         provider: npm
@@ -22,12 +23,12 @@ jobs:
     - stage: deploy gh pages
       before_deploy:
       - yarn install
-      - yarn build
+      - yarn build:example
       deploy:
         provider: pages
         skip-cleanup: true
         github-token: "$GITHUB_TOKEN"
         keep-history: true
-        local-dir: build
+        local-dir: example/build
         on:
           branch: master

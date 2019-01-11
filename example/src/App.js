@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import Designer from './designer';
+import Designer from '@experium/react-designer';
 
 export default class App extends Component {
     state = {
