@@ -14,6 +14,7 @@ const StyledInput = styled.input`
     color: darkslategray;
     border-radius: 3px;
     outline: none;
+    font-size: 11px;
 `;
 
 export default class Input extends Component {

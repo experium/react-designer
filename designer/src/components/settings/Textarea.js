@@ -14,6 +14,7 @@ const StyledTextarea = styled(AutosizeTextarea)`
     outline: none;
     width: 100%;
     resize: none;
+    font-size: 11px;
 `;
 
 export default class Textarea extends Component {

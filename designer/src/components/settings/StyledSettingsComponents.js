@@ -20,6 +20,7 @@ export const PanelButton = styled.button`
     position: relative;
     overflow: hidden;
     outline: none;
+    font-size: 11px;
 `;
 
 export const Small = styled.div`

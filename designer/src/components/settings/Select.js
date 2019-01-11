@@ -14,6 +14,7 @@ const StyledSelect = styled.select`
     border-right-color: rgb(183, 183, 183);
     color: darkslategray;
     width: 100%;
+    font-size: 11px;
 `;
 
 export default class Select extends Component {
