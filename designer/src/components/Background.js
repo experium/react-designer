@@ -31,6 +31,15 @@ export default class Background extends Component {
         image.onload = () => this.setState({ image });
     }
 
+    calcPosition = (type, imgWidth, imgHeight) => {
+        const { width, height } = this.props;
+
+        return {
+            x: /left/.test(type) ? 0 : /right/.test(type) ? width - imgWidth : width / 2 - imgWidth / 2,
+            y: /top/.test(type) ? 0 : /bottom/.test(type) ? height - imgHeight : height / 2 - imgHeight / 2
+        };
+    }
+
     getProps = () => {
         const { image } = this.state;
 
@@ -38,20 +47,30 @@ export default class Background extends Component {
             return {};
         }
 
-        const { width, height } = this.props;
+        const { width, height, settings: { backgroundAlign, coverBackground }} = this.props;
         const { naturalWidth, naturalHeight } = image;
+
+        if (!coverBackground) {
+            return {
+                width: naturalWidth,
+                height: naturalHeight,
+                ...this.calcPosition(backgroundAlign, naturalWidth, naturalHeight)
+            }
+        }
+
         const modifiedHeight = naturalHeight / (naturalWidth / width);
         const modifiedWidth = naturalWidth / (naturalHeight / height);
         const acrossWidth = height > modifiedWidth || (height < modifiedHeight && modifiedWidth < width);
+        const position = this.calcPosition(backgroundAlign, modifiedWidth, modifiedHeight);
 
         return acrossWidth ? {
             width,
             height: modifiedHeight,
-            y: -modifiedHeight / 2 + (height / 2)
+            y: position.y
         } : {
             height,
             width: modifiedWidth,
-            x: -modifiedWidth / 2 + (width / 2)
+            x: position.x
         };
     }
 
