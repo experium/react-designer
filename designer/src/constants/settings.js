@@ -41,7 +41,7 @@ export const DEFAULT_SETTINGS = {
         fontSize: 20,
         align: 'left',
         fontStyle: 'normal',
-        fontFamily: 'Open Sans'
+        fontFamily: 'Arial, sans-serif'
     },
     image: {
         type: 'image',

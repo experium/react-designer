@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Stage, Layer, Rect, Circle as KonvaCircle, Line } from 'react-konva';
 import { find, propEq, filter, has, pathEq, update, equals, head, unnest } from 'ramda';
-import WebFont from 'webfontloader';
 
 import Transformer from './Transformer';
 import Rectangle from './elements/Rectangle';
@@ -38,15 +37,6 @@ export default class Canvas extends Component {
         currentAnchor: PropTypes.object,
         elements: PropTypes.arrayOf(PropTypes.object)
     };
-
-    componentDidMount() {
-        WebFont.load({
-            google: {
-                families: FONTS.map(i => i.value)
-            },
-            classes: false
-        });
-    }
 
     handleStageMouseDown = e => {
         const { onChangeCurrent, elements, selectedType, onAddElement, current, onAddAnchor, anchorsEditable } = this.props;
