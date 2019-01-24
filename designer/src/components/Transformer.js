@@ -6,16 +6,13 @@ import { TRANSFORM_SETTINGS } from '../constants/settings';
 
 export default class Transformer extends Component {
     static propTypes = {
-        current: PropTypes.object
+        current: PropTypes.object,
+        getRef: PropTypes.func
     };
 
     static defaultProps = {
         current: {}
     };
-
-    componentDidMount() {
-        this.checkNode();
-    }
 
     componentDidUpdate() {
         this.checkNode();
@@ -41,11 +38,14 @@ export default class Transformer extends Component {
     }
 
     render() {
-        const { current } = this.props;
+        const { current, getRef } = this.props;
         const props = TRANSFORM_SETTINGS[current.type] || {};
 
         return <KonvaTransformer
-            ref={node => this.transformer = node}
+            ref={node => {
+                this.transformer = node;
+                getRef && getRef(node);
+            }}
             rotationSnaps={[0, 45, 90, 135, 180, 225, 270, 315, 359]}
             keepRatio
             {...props} />

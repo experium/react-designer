@@ -7,7 +7,6 @@ import Transformer from './Transformer';
 import Rectangle from './elements/Rectangle';
 import Circle from './elements/Circle';
 import Text from './elements/Text';
-import { FONTS } from '../constants/fonts';
 import Background from './Background';
 import Image from './elements/Image';
 import Qr from './elements/Qr';
@@ -35,7 +34,8 @@ export default class Canvas extends Component {
         anchorsEditable: PropTypes.bool,
         onChangeCurrentAnchor: PropTypes.func,
         currentAnchor: PropTypes.object,
-        elements: PropTypes.arrayOf(PropTypes.object)
+        elements: PropTypes.arrayOf(PropTypes.object),
+        getTransformerRef: PropTypes.func
     };
 
     handleStageMouseDown = e => {
@@ -136,10 +136,10 @@ export default class Canvas extends Component {
     }
 
     render() {
-        const { width, height, current, elements, settings } = this.props;
+        const { width, height, current, elements, settings, getTransformerRef } = this.props;
         const elementsWithAnchors = this.getElementsWithAnchors();
 
-        return <Stage
+        return  <Stage
             width={width}
             height={height}
             onMouseDown={this.handleStageMouseDown}>
@@ -159,7 +159,7 @@ export default class Canvas extends Component {
             }
             <Layer ref={node => this.layer = node}>
                 { elements.map(this.renderElement) }
-                <Transformer current={current} />
+                <Transformer current={current} getRef={getTransformerRef} />
             </Layer>
             <Layer>
                 { elementsWithAnchors.map(this.renderAnchorBorder) }

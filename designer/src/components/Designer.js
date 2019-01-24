@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { find, propEq, pathOr, path, findIndex, update, remove, prop, assoc, contains } from 'ramda';
 import uniqid from 'uniqid';
+import ClickOutside from 'react-click-outside';
 
 import Toolbar from './Toolbar';
 import Canvas from './Canvas';
@@ -17,7 +18,7 @@ const Container = styled.div`
         box-sizing: border-box;
     }
     font-family: 'Lucida Grande', sans-serif;
-    display: flex;
+    display: inline-flex;
 `;
 
 const CanvasWrapper = styled.div`
@@ -26,6 +27,10 @@ const CanvasWrapper = styled.div`
     width: ${prop('width')}px;
     height: ${prop('height')}px;
     overflow: hidden;
+`;
+
+const Wrapper = styled.div`
+    display: inline-block;
 `;
 
 export default class Designer extends Component {
@@ -265,55 +270,67 @@ export default class Designer extends Component {
         this.onChangeCurrentProp('anchors', remove(currentAnchor.index, 1, current.anchors));
     }
 
+    detachElement = () => {
+        if (this.transformer) {
+            this.transformer.detach();
+            this.transformer.getLayer().batchDraw();
+        }
+    };
+
     render() {
         const { width, height } = this.props;
         const { selectedType, anchorsEditable, currentAnchor } = this.state;
         const elements = this.getElements();
         const currentElement = this.getCurrentElement();
 
-        return <CurrentContext.Provider value={{
-            current: currentElement,
-            onChangeProp: this.onChangeCurrentProp,
-            onChange: this.onChangeCurrentElement,
-            onRemove: this.onRemoveCurrent,
-            settings: this.getSettings(),
-            onChangeSettingsProp: this.onChangeSettingsProp,
-            onChangeSettings: this.onChangeSettings
-        }}>
-            <OrderContext.Provider value={{
-                onChangeOrder: this.onChangeOrder
-            }}>
-                <Container>
-                    <Toolbar
-                        selected={selectedType}
-                        onSelect={this.onSelectType} />
-                    <CanvasWrapper width={width} height={height}>
-                        <Canvas
-                            elements={elements}
-                            current={currentElement}
-                            onChangeCurrentElement={this.onChangeCurrentElement}
-                            onChangeCurrentProp={this.onChangeCurrentProp}
-                            selectedType={selectedType}
-                            onChangeCurrent={this.onChangeCurrent}
-                            onAddElement={this.onAddElement}
-                            onAddAnchor={this.onAddAnchor}
-                            onChangeCurrentAnchor={this.onChangeCurrentAnchor}
-                            currentAnchor={currentAnchor}
-                            width={width}
-                            height={height}
-                            settings={this.getSettings()}
-                            anchorsEditable={anchorsEditable} />
-                    </CanvasWrapper>
-                    <AnchorsEditableContext.Provider value={{
-                        editable: anchorsEditable,
-                        onChangeEditable: this.onChangeAnchorsEditable,
-                        onRemoveCurrentAnchor: this.onRemoveCurrentAnchor,
-                        currentAnchor
+        return <Wrapper>
+            <ClickOutside onClickOutside={this.detachElement}>
+                <CurrentContext.Provider value={{
+                    current: currentElement,
+                    onChangeProp: this.onChangeCurrentProp,
+                    onChange: this.onChangeCurrentElement,
+                    onRemove: this.onRemoveCurrent,
+                    settings: this.getSettings(),
+                    onChangeSettingsProp: this.onChangeSettingsProp,
+                    onChangeSettings: this.onChangeSettings
+                }}>
+                    <OrderContext.Provider value={{
+                        onChangeOrder: this.onChangeOrder
                     }}>
-                        <SettingsPanel type={path(['type'], currentElement)} />
-                    </AnchorsEditableContext.Provider>
-                </Container>
-            </OrderContext.Provider>
-        </CurrentContext.Provider>;
+                            <Container>
+                                <Toolbar
+                                    selected={selectedType}
+                                    onSelect={this.onSelectType} />
+                                <CanvasWrapper width={width} height={height}>
+                                    <Canvas
+                                        elements={elements}
+                                        current={currentElement}
+                                        onChangeCurrentElement={this.onChangeCurrentElement}
+                                        onChangeCurrentProp={this.onChangeCurrentProp}
+                                        selectedType={selectedType}
+                                        onChangeCurrent={this.onChangeCurrent}
+                                        onAddElement={this.onAddElement}
+                                        onAddAnchor={this.onAddAnchor}
+                                        onChangeCurrentAnchor={this.onChangeCurrentAnchor}
+                                        currentAnchor={currentAnchor}
+                                        width={width}
+                                        height={height}
+                                        settings={this.getSettings()}
+                                        anchorsEditable={anchorsEditable}
+                                        getTransformerRef={node => this.transformer = node} />
+                                </CanvasWrapper>
+                                <AnchorsEditableContext.Provider value={{
+                                    editable: anchorsEditable,
+                                    onChangeEditable: this.onChangeAnchorsEditable,
+                                    onRemoveCurrentAnchor: this.onRemoveCurrentAnchor,
+                                    currentAnchor
+                                }}>
+                                    <SettingsPanel type={path(['type'], currentElement)} />
+                                </AnchorsEditableContext.Provider>
+                            </Container>
+                    </OrderContext.Provider>
+                </CurrentContext.Provider>
+            </ClickOutside>
+        </Wrapper>;
     }
 }
