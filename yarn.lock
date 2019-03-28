@@ -5976,10 +5976,10 @@ kleur@^2.0.1:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-2.0.2.tgz#b704f4944d95e255d038f0cb05fb8a602c55a300"
   integrity sha512-77XF9iTllATmG9lSlIv0qdQ2BQ/h9t0bJllHlbvsQ0zUWfU7Yi0S8L5JXzPZgkefIiajLmBJJ4BsMJmqcf7oxQ==
 
-konva@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/konva/-/konva-2.6.0.tgz#43165b95e32a4378ce532d9113c914f4998409c3"
-  integrity sha512-LCOoavICTD9PYoAqtWo8sbxYtCiXdgEeY7vj/Sq8b2bwFmrQr9Ak0RkD4/jxAf5fcUQRL5e1zPLyfRpVndp20A==
+konva@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-3.2.3.tgz#421c6b4d28ea4fea555a827acd05460a94944349"
+  integrity sha512-/7tzp91LWB55A7vl9zjvQfqkoL0llhwK/Z1a3pxwxsjtxIRhCs1Z+FhGZ1wfmrz7arX7lHyRJML+FZrW8y5Iwg==
 
 last-call-webpack-plugin@^3.0.0:
   version "3.0.0"
@@ -8252,23 +8252,23 @@ react-is@^16.6.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
   integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
-react-konva@^16.7.1:
-  version "16.7.1"
-  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-16.7.1.tgz#6ddcd7f9dd4f8015064eeb5fa8133b8dd1984407"
-  integrity sha512-0l3TY41472VQpu4h5DYTTf1shnWk3SUll7rjhJiVyOxkR8OQoUGlqQ6wLSxIzfX1QvtMhHEpKrvw654RVuQL/Q==
+react-konva@^16.8.5:
+  version "16.8.5"
+  resolved "https://registry.yarnpkg.com/react-konva/-/react-konva-16.8.5.tgz#ada27c9728490dc939b871e076a44d1d4180b1d2"
+  integrity sha512-zTG1lXEZHkoUd+DtCd2dZPJlICN35KR51bGtSomWWBS/0HaWGe68ZuVZe9AIZfjmcLNfg5oNqrifAJ6UWYwA4g==
   dependencies:
-    react-reconciler "^0.18.0"
-    scheduler "^0.12.0"
+    react-reconciler "^0.20.3"
+    scheduler "^0.13.5"
 
-react-reconciler@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.18.0.tgz#f956c7a4824cd0cd6f99689a666fc57328d666b3"
-  integrity sha512-EsHf/CsgI2elGHrH1nQTouWJrAZZ3EE93qcY6dXd0bOC3HirVMBn2JriQO2TAGHle0yq2g+QwfC/LohoWExLRg==
+react-reconciler@^0.20.3:
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.20.3.tgz#ff5f75eb73e004a2a8757b41cd645baf442ea4b9"
+  integrity sha512-kKowgno8ZRNhFSQcuQ2ja/Lrvav58qnwy4w7bVbA4x+WKlDrP1vU42AQwwi2fMltVRTprD6OVMuCumPFPrB9fQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.12.0"
+    scheduler "^0.13.5"
 
 react-scripts@2.1.3:
   version "2.1.3"
@@ -8815,6 +8815,14 @@ scheduler@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
   integrity sha512-t7MBR28Akcp4Jm+QoR63XgAi9YgCUmgvDHqf5otgAj4QvdoBE4ImCX0ffehefePPG+aitiYHp0g/mW6s4Tp+dw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.13.5:
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.5.tgz#b7226625167041298af3b98088a9dbbf6d7733a8"
+  integrity sha512-K98vjkQX9OIt/riLhp6F+XtDPtMQhqNcf045vsh+pcuvHq+PHy1xCrH3pq1P40m6yR46lpVvVhKdEOtnimuUJw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -10036,11 +10044,6 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
-
-webfontloader@^1.6.28:
-  version "1.6.28"
-  resolved "https://registry.yarnpkg.com/webfontloader/-/webfontloader-1.6.28.tgz#db786129253cb6e8eae54c2fb05f870af6675bae"
-  integrity sha1-23hhKSU8tujq5UwvsF+HCvZnW64=
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
