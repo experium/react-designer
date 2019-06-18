@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "8b479528628968885265",
-    "url": "/react-designer/static/js/main.8b479528.chunk.js"
+    "revision": "6dbcf1b2e9b4fa3fd84d",
+    "url": "/react-designer/static/js/main.6dbcf1b2.chunk.js"
   },
   {
     "revision": "752540c8ecad8d5d21d4",
@@ -12,7 +12,7 @@ self.__precacheManifest = [
     "url": "/react-designer/static/js/runtime~main.de1edfb7.js"
   },
   {
-    "revision": "4a43a2fae1a31f8a4ab5bdaa8bed0080",
+    "revision": "f57d838541931826a44a03ad38ca2d61",
     "url": "/react-designer/index.html"
   }
 ];
