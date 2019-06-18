@@ -40,7 +40,8 @@ export default class Designer extends Component {
         data: PropTypes.shape({
             elements: PropTypes.arrayOf(PropTypes.object),
             settings: PropTypes.object
-        })
+        }),
+        getStageRef: PropTypes.func
     };
 
     static defaultProps = {
@@ -278,7 +279,7 @@ export default class Designer extends Component {
     };
 
     render() {
-        const { width, height } = this.props;
+        const { width, height, getStageRef } = this.props;
         const { selectedType, anchorsEditable, currentAnchor } = this.state;
         const elements = this.getElements();
         const currentElement = this.getCurrentElement();
@@ -317,7 +318,8 @@ export default class Designer extends Component {
                                         height={height}
                                         settings={this.getSettings()}
                                         anchorsEditable={anchorsEditable}
-                                        getTransformerRef={node => this.transformer = node} />
+                                        getTransformerRef={node => this.transformer = node}
+                                        getStageRef={getStageRef} />
                                 </CanvasWrapper>
                                 <AnchorsEditableContext.Provider value={{
                                     editable: anchorsEditable,

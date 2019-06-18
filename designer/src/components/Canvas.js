@@ -35,7 +35,8 @@ export default class Canvas extends Component {
         onChangeCurrentAnchor: PropTypes.func,
         currentAnchor: PropTypes.object,
         elements: PropTypes.arrayOf(PropTypes.object),
-        getTransformerRef: PropTypes.func
+        getTransformerRef: PropTypes.func,
+        getStageRef: PropTypes.func
     };
 
     handleStageMouseDown = e => {
@@ -136,13 +137,14 @@ export default class Canvas extends Component {
     }
 
     render() {
-        const { width, height, current, elements, settings, getTransformerRef } = this.props;
+        const { width, height, current, elements, settings, getTransformerRef, getStageRef } = this.props;
         const elementsWithAnchors = this.getElementsWithAnchors();
 
         return  <Stage
             width={width}
             height={height}
-            onMouseDown={this.handleStageMouseDown}>
+            onMouseDown={this.handleStageMouseDown}
+            ref={getStageRef}>
             <Layer>
                 <Rect
                     width={width}
