@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Image as KonvaImage, Rect } from 'react-konva';
-import { equals } from 'ramda';
-import Konva from 'konva'
+import { equals, startsWith } from 'ramda';
 
 import elementProps from './elementProps';
 import withElementHandlers from '../hocs/withElementHandlers';
+import { getBase64FromUrl } from '../../utils/images';
 
 class Image extends Component {
     static propTypes = {
@@ -25,16 +25,14 @@ class Image extends Component {
         }
     }
 
-    setImage = () => {
+    setImage = async () => {
         const { element, onChange, getFileUrl } = this.props;
 
         if (element.image) {
             let elementImage = null;
 
-            if (getFileUrl) {
-                Konva.Image.fromURL(getFileUrl(element.image), image => {
-                    elementImage = image;
-                });
+            if (getFileUrl && !startsWith('data:image', element.image)) {
+                elementImage = await getBase64FromUrl(getFileUrl(element.image));
             } else {
                 elementImage = element.image;
             }

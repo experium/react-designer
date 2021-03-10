@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image, Rect } from 'react-konva';
-import { equals } from 'ramda';
+import { equals, startsWith } from 'ramda';
+
+import { getBase64FromUrl } from '../utils/images';
 
 export default class Background extends Component {
     static propTypes = {
@@ -25,13 +27,11 @@ export default class Background extends Component {
         }
     }
 
-    setImage = () => {
+    setImage = async () => {
         let elementImage = null;
 
-        if (this.props.getFileUrl) {
-            Konva.Image.fromURL(this.props.getFileUrl(this.props.settings.background), image => {
-                elementImage = image;
-            });
+        if (this.props.getFileUrl && !startsWith('data:image', element.image)) {
+            elementImage = await getBase64FromUrl(this.props.getFileUrl(this.props.settings.background));
         } else {
             elementImage = this.props.settings.background;
         }

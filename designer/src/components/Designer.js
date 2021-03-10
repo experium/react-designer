@@ -49,7 +49,8 @@ export default class Designer extends Component {
     static defaultProps = {
         data: {},
         width: WIDTH,
-        height: HEIGHT
+        height: HEIGHT,
+        getFileUrl: () => 'https://c.radikal.ru/c23/2103/dd/85835c23f0be.png'
     };
 
     state = {
