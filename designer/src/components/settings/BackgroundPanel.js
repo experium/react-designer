@@ -11,11 +11,13 @@ import BackgroundAlignToggler from './BackgroundAlignToggler';
 
 export default class BackgroundPanel extends Component {
     render() {
+        const { postFileUrl } = this.props;
+
         return <CurrentContext.Consumer>
             { ({ settings, onChangeSettingsProp }) =>
                 <Panel>
                     <Row label='Фон'>
-                        <ImageLoader prop='background' removable />
+                        <ImageLoader prop='background' postFileUrl={postFileUrl} removable />
                     </Row>
                     { !settings.pattern && settings.background &&
                         <Fragment>

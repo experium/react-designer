@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image as KonvaImage, Rect } from 'react-konva';
 import { equals } from 'ramda';
+import Konva from 'konva'
 
 import elementProps from './elementProps';
 import withElementHandlers from '../hocs/withElementHandlers';
@@ -25,12 +26,22 @@ class Image extends Component {
     }
 
     setImage = () => {
-        const { element, onChange } = this.props;
+        const { element, onChange, getFileUrl } = this.props;
 
         if (element.image) {
+            let elementImage = null;
+
+            if (getFileUrl) {
+                Konva.Image.fromURL(getFileUrl(element.image), image => {
+                    elementImage = image;
+                });
+            } else {
+                elementImage = element.image;
+            }
+
             const image = new window.Image();
 
-            image.src = element.image;
+            image.src = elementImage;
             image.onload = () => {
                 this.setState({ image });
                 onChange({

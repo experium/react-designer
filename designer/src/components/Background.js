@@ -7,7 +7,8 @@ export default class Background extends Component {
     static propTypes = {
         width: PropTypes.number,
         height: PropTypes.number,
-        settings: PropTypes.object
+        settings: PropTypes.object,
+        getFileUrl: PropTypes.func
     };
 
     state = {
@@ -25,9 +26,19 @@ export default class Background extends Component {
     }
 
     setImage = () => {
+        let elementImage = null;
+
+        if (this.props.getFileUrl) {
+            Konva.Image.fromURL(this.props.getFileUrl(this.props.settings.background), image => {
+                elementImage = image;
+            });
+        } else {
+            elementImage = this.props.settings.background;
+        }
+
         const image = new window.Image();
 
-        image.src = this.props.settings.background;
+        image.src = elementImage;
         image.onload = () => this.setState({ image });
     }
 

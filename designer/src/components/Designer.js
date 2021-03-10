@@ -41,7 +41,9 @@ export default class Designer extends Component {
             elements: PropTypes.arrayOf(PropTypes.object),
             settings: PropTypes.object
         }),
-        getStageRef: PropTypes.func
+        getStageRef: PropTypes.func,
+        postFileUrl: PropTypes.string,
+        getFileUrl: PropTypes.func
     };
 
     static defaultProps = {
@@ -99,17 +101,20 @@ export default class Designer extends Component {
     moveCurrentToX = (e, left) => {
         e.preventDefault();
         const current = this.getCurrentElement();
-        const x = current.x + (left ? -1 : 1);
+
+        if (current) {
+            const x = current.x + (left ? -1 : 1);
 
 
-        this.onChangeCurrentElement({
-            ...current,
-            x,
-            ...(current.anchors ?
-                { anchors: current.anchors.map(a => assoc('x', a.x + (left ? -1 : 1), a)) } :
-                {}
-            )
-        });
+            this.onChangeCurrentElement({
+                ...current,
+                x,
+                ...(current.anchors ?
+                    { anchors: current.anchors.map(a => assoc('x', a.x + (left ? -1 : 1), a)) } :
+                    {}
+                )
+            });
+        }
     }
 
     moveCurrentToY = (e, top) => {
@@ -279,7 +284,7 @@ export default class Designer extends Component {
     };
 
     render() {
-        const { width, height, getStageRef } = this.props;
+        const { width, height, getStageRef, postFileUrl, getFileUrl } = this.props;
         const { selectedType, anchorsEditable, currentAnchor } = this.state;
         const elements = this.getElements();
         const currentElement = this.getCurrentElement();
@@ -319,7 +324,8 @@ export default class Designer extends Component {
                                         settings={this.getSettings()}
                                         anchorsEditable={anchorsEditable}
                                         getTransformerRef={node => this.transformer = node}
-                                        getStageRef={getStageRef} />
+                                        getStageRef={getStageRef}
+                                        getFileUrl={getFileUrl} />
                                 </CanvasWrapper>
                                 <AnchorsEditableContext.Provider value={{
                                     editable: anchorsEditable,
@@ -327,7 +333,7 @@ export default class Designer extends Component {
                                     onRemoveCurrentAnchor: this.onRemoveCurrentAnchor,
                                     currentAnchor
                                 }}>
-                                    <SettingsPanel type={path(['type'], currentElement)} />
+                                    <SettingsPanel type={path(['type'], currentElement)} postFileUrl={postFileUrl} />
                                 </AnchorsEditableContext.Provider>
                             </Container>
                     </OrderContext.Provider>

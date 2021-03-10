@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { head } from 'ramda';
+import { head, props } from 'ramda';
 
 import { PanelButton } from './StyledSettingsComponents';
 import CurrentContext from '../context/CurrentContext';
@@ -22,18 +22,36 @@ const FileInput = styled.input`
 export default class ImageLoader extends Component {
     static propTypes = {
         prop: PropTypes.string,
-        removable: PropTypes.bool
+        removable: PropTypes.bool,
+        postFileUrl: PropTypes.string
     };
 
-    reader = new FileReader();
+    state = {
+        error: false
+    };
 
     onLoad = (e, fn) => {
-        const { prop } = this.props;
+        const { prop, postFileUrl } = this.props;
         const file = head(e.target.files);
 
         if (file) {
-            this.reader.readAsDataURL(file);
-            this.reader.onload = () => fn(prop, this.reader.result);
+            if (postFileUrl) {
+                let formData = new FormData();
+
+                formData.append('file', file);
+                fetch(postFileUrl, { method: 'POST', body: formData })
+                    .then(res => res.json())
+                    .then(({ id }) => fn(prop, id))
+                    .catch(() => {
+                        this.setState({ error: true });
+                        setTimeout(() => this.setState({ error: false }), 10000);
+                    });
+            } else {
+                const reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = () => fn(prop, reader.result);
+            }
         }
     }
 
@@ -56,8 +74,26 @@ export default class ImageLoader extends Component {
     }
 
     render() {
-        return <CurrentContext.Consumer>
-            { this.renderLoader }
-        </CurrentContext.Consumer>;
+        return <Fragment>
+            <CurrentContext.Consumer>
+                { this.renderLoader }
+            </CurrentContext.Consumer>
+            { this.state.error &&
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 15,
+                        right: 15,
+                        fontSize: 14,
+                        background: '#fff',
+                        fontFamily: 'Arial',
+                        padding: 15,
+                        zIndex: 1000,
+                        boxShadow: '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)'
+                    }}>
+                    Не удалось загрузить файл
+                </div>
+            }
+        </Fragment>;
     }
 }

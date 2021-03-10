@@ -24,7 +24,8 @@ const PANELS = {
 
 export default class SettingsPanel extends Component {
     static propTypes = {
-        type: PropTypes.string
+        type: PropTypes.string,
+        postFileUrl: PropTypes.string
     };
 
     getPanels = () => {
@@ -34,10 +35,12 @@ export default class SettingsPanel extends Component {
     }
 
     render() {
-        const { type } = this.props;
+        const { type, postFileUrl } = this.props;
 
         return <div>
-            { this.getPanels().map((Panel, index) => <Panel key={`panel-${index}`} type={type} />) }
+            { this.getPanels().map((Panel, index) =>
+                <Panel key={`panel-${index}`} type={type} postFileUrl={postFileUrl} />)
+            }
         </div>;
     }
 }

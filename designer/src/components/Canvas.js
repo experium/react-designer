@@ -36,7 +36,8 @@ export default class Canvas extends Component {
         currentAnchor: PropTypes.object,
         elements: PropTypes.arrayOf(PropTypes.object),
         getTransformerRef: PropTypes.func,
-        getStageRef: PropTypes.func
+        getStageRef: PropTypes.func,
+        getFileUrl: PropTypes.func
     };
 
     handleStageMouseDown = e => {
@@ -69,14 +70,15 @@ export default class Canvas extends Component {
     }
 
     renderElement = element => {
-        const { onChangeCurrentElement } = this.props;
+        const { onChangeCurrentElement, getFileUrl } = this.props;
         const Component = ELEMENTS[element.type];
 
         return <Component
             key={element.name}
             element={element}
             onChange={onChangeCurrentElement}
-            layer={this.layer} />;
+            layer={this.layer}
+            getFileUrl={getFileUrl} />;
     }
 
     getElementsWithAnchors = () => {
@@ -137,7 +139,7 @@ export default class Canvas extends Component {
     }
 
     render() {
-        const { width, height, current, elements, settings, getTransformerRef, getStageRef } = this.props;
+        const { width, height, current, elements, settings, getTransformerRef, getStageRef, getFileUrl } = this.props;
         const elementsWithAnchors = this.getElementsWithAnchors();
 
         return  <Stage
@@ -156,7 +158,8 @@ export default class Canvas extends Component {
                     <Background
                         settings={settings}
                         width={width}
-                        height={height} />
+                        height={height}
+                        getFileUrl={getFileUrl} />
                 </Layer>
             }
             <Layer ref={node => this.layer = node}>

@@ -20,7 +20,7 @@ class Text extends Component {
     }
 
     redraw = () => {
-        setTimeout(() => this.props.layer.draw(), 500);
+        setTimeout(() => this.props.layer && this.props.layer.draw(), 500);
     }
 
     render() {
