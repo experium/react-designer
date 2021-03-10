@@ -30,7 +30,7 @@ export default class Background extends Component {
     setImage = async () => {
         let elementImage = null;
 
-        if (this.props.getFileUrl && !startsWith('data:image', element.image)) {
+        if (this.props.getFileUrl && !startsWith('data:image', this.props.settings.background)) {
             elementImage = await getBase64FromUrl(this.props.getFileUrl(this.props.settings.background));
         } else {
             elementImage = this.props.settings.background;
