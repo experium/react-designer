@@ -29,7 +29,7 @@ export default class Transformer extends Component {
         }
 
         if (selectedNode && !current.anchors) {
-            this.transformer.attachTo(selectedNode);
+            this.transformer.nodes([selectedNode]);
         } else {
             this.transformer.detach();
         }
