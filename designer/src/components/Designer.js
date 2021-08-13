@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { find, propEq, pathOr, path, findIndex, update, remove, prop, assoc, contains } from 'ramda';
-import uniqid from 'uniqid';
+import { nanoid } from 'nanoid';
 import ClickOutside from 'react-click-outside';
 
 import Toolbar from './Toolbar';
@@ -180,7 +180,7 @@ export default class Designer extends Component {
 
     onAddElement = (x, y) => {
         const { selectedType } = this.state;
-        const name = uniqid();
+        const name = nanoid();
         const defaultSettings = DEFAULT_SETTINGS[selectedType];
 
         this.onChangeElements([
